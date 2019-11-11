@@ -1,14 +1,23 @@
-count_words: count_words.o lexer.o -lfl
-	gcc count_words.o lexer.o -lfl -o count_words
+vpath %.c src
+vpath %.l src
+vpath %.h include
 
-count_words.o: count_words.c
-	gcc -c count_words.c
+CPPFLAGS = -I include
 
-lexer.o: lexer.c
-	gcc -c lexer.c
+count_words: count_words.o counter.o lexer.o -lfl
+	gcc $^ -o $@
+
+count_words.o: count_words.c counter.h
+	gcc $(CPPFLAGS) -c $<
+
+counter.o: counter.c counter.h lexer.h
+	gcc $(CPPFLAGS) -c $<
+
+lexer.o: lexer.c lexer.h
+	gcc $(CPPFLAGS) -c $<
 
 lexer.c: lexer.l
-	flex -t lexer.l > lexer.c
+	flex -t $< > $@
 
 .PHONY: clean
 clean:
