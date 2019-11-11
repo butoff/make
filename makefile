@@ -9,3 +9,7 @@ lexer.o: lexer.c
 
 lexer.c: lexer.l
 	flex -t lexer.l > lexer.c
+
+.PHONY: clean
+clean:
+	rm -f *.o lexer.c count_words
